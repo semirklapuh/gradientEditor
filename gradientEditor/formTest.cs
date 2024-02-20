@@ -98,8 +98,13 @@ namespace gradientEditor
                     newText = "#" + (MyDialog.Color.ToArgb() & 0x00FFFFFF).ToString("X6");
                 }
 
-                // Insert text into the first column of the clicked row
+                // Insert the text and change the color of the first column
                 dataGridView1.Rows[e.RowIndex].Cells["Color"].Value = newText;
+                dataGridView1.Rows[e.RowIndex].Cells["Color"].Style.BackColor = MyDialog.Color;
+
+                //TODO: ask someone
+                // Set a default value for color stop
+                dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value = "50%";
 
                 //// Add a new empty row
                 //DataGridViewRow newRow = new DataGridViewRow();
@@ -152,6 +157,9 @@ namespace gradientEditor
             gradientResult += ")";
 
             txtResult.Text = gradientResult;
+
+            //Change the backround of preview on every result change
+            previewUpdate();
         }
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
@@ -171,6 +179,11 @@ namespace gradientEditor
                 "circle at bottom right", "circle at bottom left"});
                 cbDirections.SelectedIndex = 0;
             }
+        }
+
+        private void previewUpdate()
+        {
+            this.webView21.ExecuteScriptAsync($"document.getElementById('preview_space').style['background'] = '" + txtResult.Text + "';");
         }
     }
 }
