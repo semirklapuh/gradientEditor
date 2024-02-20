@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gradientEditor", "gradientEditor\gradientEditor.csproj", "{EB27C0A8-9585-4EF6-AFF0-452857004383}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB27C0A8-9585-4EF6-AFF0-452857004383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB27C0A8-9585-4EF6-AFF0-452857004383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB27C0A8-9585-4EF6-AFF0-452857004383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB27C0A8-9585-4EF6-AFF0-452857004383}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F1E46F0-7666-4243-9706-651FE88DAD31}
+	EndGlobalSection
+EndGlobal
