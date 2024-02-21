@@ -18,15 +18,15 @@ namespace gradientEditor
         public formTest()
         {
             InitializeComponent();
-            InitializeDataGridView();
             InitializeComboBoxType();
             InitializeComboBoxDirection();
+            InitializeDataGridView();
             InitializeRadioBtnColorFormat();
         }
 
         private void InitializeRadioBtnColorFormat()
         {
-           radioBtnHex.Checked = true;
+            radioBtnHex.Checked = true;
         }
 
         private void InitializeComboBoxDirection()
@@ -94,8 +94,16 @@ namespace gradientEditor
                 // Update the text box color if the user clicks OK 
                 string newText = "";
                 if (MyDialog.ShowDialog() == DialogResult.OK)
-                { 
-                    newText = "#" + (MyDialog.Color.ToArgb() & 0x00FFFFFF).ToString("X6");
+                {
+
+                    if (radioBtnHex.Checked)
+                    {
+                        newText = "#" + (MyDialog.Color.ToArgb() & 0x00FFFFFF).ToString("X6");
+                    }
+                    else
+                    {
+                        newText = ConvertColorToRGBA(MyDialog.Color);
+                    }
                 }
 
                 // Insert the text and change the color of the first column
@@ -115,7 +123,7 @@ namespace gradientEditor
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == dataGridView1.Rows.Count -1)
+            if (e.RowIndex == dataGridView1.Rows.Count - 1)
             {
                 // Add a new empty row
                 DataGridViewRow newRow = new DataGridViewRow();
@@ -139,13 +147,15 @@ namespace gradientEditor
         private void FormatResult(DataGridView dataGridView)
         {
             string gradientResult = "";
-            string gradientType = "linear-gradient";
-            string gradientDirection = "to bottom";
+            string gradientType = $"{cbType.SelectedItem}-gradient";
+            string gradientDirection = $"{cbDirections.SelectedItem}";
 
             gradientResult = gradientType + "(" + gradientDirection + ",";
 
-            foreach (DataGridViewRow row in dataGridView.Rows) {
-                if (row.Cells["Color"].Value != null && row.Cells["ColorStop"].Value != null) {
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (row.Cells["Color"].Value != null && row.Cells["ColorStop"].Value != null)
+                {
                     var colorValue = row.Cells["Color"].Value.ToString();
                     var colorStop = row.Cells["ColorStop"].Value.ToString();
 
@@ -179,11 +189,113 @@ namespace gradientEditor
                 "circle at bottom right", "circle at bottom left"});
                 cbDirections.SelectedIndex = 0;
             }
+            FormatResult(dataGridView1);
         }
 
         private void previewUpdate()
         {
             this.webView21.ExecuteScriptAsync($"document.getElementById('preview_space').style['background'] = '" + txtResult.Text + "';");
         }
+
+        private void cbDirections_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FormatResult(dataGridView1);
+        }
+
+        private string ConvertColorToRGBA(Color color)
+        {
+            int red = color.R;
+            int green = color.G;
+            int blue = color.B;
+            int alpha = color.A;
+
+            // Normalize alpha to a float value between 0.0 and 1.0
+            //float alphaNormalized = alpha / 255.0f;
+            float alphaNormalized = 1;
+
+            // Format the RGBA string
+            string rgbaFormat = $"rgba({red}, {green}, {blue}, {alphaNormalized:F2})";
+
+            return rgbaFormat;
+        }
+
+        private string ConvertColorToHex(Color color)
+        {
+            // Use ColorTranslator.ToHtml to convert Color to hex color code
+            string hexColor = ColorTranslator.ToHtml(color);
+
+            return hexColor;
+        }
+
+        private Color ConvertHexToColor(string hex)
+        {
+            // Remove any leading '#' character
+            hex = hex.TrimStart('#');
+
+            // Convert the hex string to an integer
+            int intValue = Convert.ToInt32(hex, 16);
+
+            // Create a Color object from the integer value
+            Color color = Color.FromArgb(intValue);
+
+            return color;
+        }
+
+        private Color ConvertRgbaToColor(string rgba)
+        {
+            // Remove "rgba(" and ")" and split the components
+            string[] components = rgba.Replace("rgba(", "").Replace(")", "").Split(',');
+
+            // Parse the components and convert to integers
+            int alpha = (int)(Convert.ToDouble(components[3]) * 255); // Normalize alpha to 0-255 range
+            int red = Convert.ToInt32(components[0].Trim());
+            int green = Convert.ToInt32(components[1].Trim());
+            int blue = Convert.ToInt32(components[2].Trim());
+
+            // Create a Color object from the components
+            Color color = Color.FromArgb(alpha, red, green, blue);
+
+            return color;
+        }
+
+        private void ConvertFromHexToRgba(DataGridView dataGridView)
+        {
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (row.Cells["Color"].Value != null)
+                {
+                    var colorValue = ConvertHexToColor(row.Cells["Color"].Value.ToString());
+                    row.Cells["Color"].Value = ConvertColorToRGBA(colorValue);
+                }
+            }
+        }
+
+        private void ConvertFromRgbaToHex(DataGridView dataGridView)
+        {
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (row.Cells["Color"].Value != null)
+                {
+                    var colorValue = ConvertRgbaToColor(row.Cells["Color"].Value.ToString());
+                    row.Cells["Color"].Value = ConvertColorToHex(colorValue);
+                }
+            }
+        }
+
+        private void radioBtnRgba_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioBtnHex.Checked)
+            {
+                ConvertFromRgbaToHex(dataGridView1);
+            }
+            else {
+                ConvertFromHexToRgba(dataGridView1);
+            }
+        }
+
+        //private void radioBtnHex_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    ConvertFromRgbaToHex(dataGridView1);
+        //}
     }
 }
