@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Syncfusion.Lic.util.encoders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -15,6 +17,7 @@ namespace gradientEditor
 {
     public partial class formTest : Form
     {
+        public bool isAlertOpen = false;
         public formTest()
         {
             InitializeComponent();
@@ -113,16 +116,21 @@ namespace gradientEditor
                 //TODO: ask someone
                 // Set a default value for color stop
                 dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value = "50%";
-
-                //// Add a new empty row
-                //DataGridViewRow newRow = new DataGridViewRow();
-                //newRow.CreateCells(dataGridView1);
-                //dataGridView1.Rows.Add(newRow);
             }
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            isAlertOpen = false;
+            if (!ValidateColor(dataGridView1.Rows[e.RowIndex].Cells["Color"].Value.ToString()))
+            {
+                dataGridView1.Rows[e.RowIndex].Cells["Color"].Value = "";
+                dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value = "";
+
+                ShowAlert();
+                return;
+            }
+            isAlertOpen = false;
             if (e.RowIndex == dataGridView1.Rows.Count - 1)
             {
                 // Add a new empty row
@@ -131,6 +139,7 @@ namespace gradientEditor
                 dataGridView1.Rows.Add(newRow);
             }
 
+            //dataGridView1.Rows[e.RowIndex].Cells["Color"].Style.BackColor
             FormatResult(dataGridView1);
         }
 
@@ -149,6 +158,7 @@ namespace gradientEditor
             string gradientResult = "";
             string gradientType = $"{cbType.SelectedItem}-gradient";
             string gradientDirection = $"{cbDirections.SelectedItem}";
+            List<string> colorCounter = new List<string>();
 
             gradientResult = gradientType + "(" + gradientDirection + ",";
 
@@ -166,10 +176,17 @@ namespace gradientEditor
             gradientResult = gradientResult.Substring(0, gradientResult.Length - 1);
             gradientResult += ")";
 
-            txtResult.Text = gradientResult;
-
-            //Change the backround of preview on every result change
-            previewUpdate();
+            if (colorCounter.Count() >= 2)
+            {
+                txtResult.Text = gradientResult;
+                //Change the backround of preview on every result change
+                previewUpdate();
+            }
+            else
+            {
+                txtResult.Text = "";
+                previewUpdate();
+            }
         }
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
@@ -288,14 +305,63 @@ namespace gradientEditor
             {
                 ConvertFromRgbaToHex(dataGridView1);
             }
-            else {
+            else
+            {
                 ConvertFromHexToRgba(dataGridView1);
             }
         }
 
-        //private void radioBtnHex_CheckedChanged(object sender, EventArgs e)
-        //{
-        //    ConvertFromRgbaToHex(dataGridView1);
-        //}
+        private void dataGridView1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            FormatResult(dataGridView1);
+        }
+
+        private bool ValidateColor(string color)
+        {
+            if (radioBtnHex.Checked)
+            {
+                return IsValidHexColor(color);
+            }
+            else {
+                return IsValidRGBAColor(color);
+            }
+        }
+
+        bool IsValidHexColor(string hexColor)
+        {
+            // Define a regular expression pattern for a valid hex color code
+            string hexPattern = @"^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$";
+
+            // Use Regex.IsMatch to check if the input matches the pattern
+            return Regex.IsMatch(hexColor, hexPattern);
+        }
+
+        bool IsValidRGBAColor(string rgbaColor)
+        {
+            // Define a regular expression pattern for a valid RGBA color code
+            string rgbaPattern = @"^rgba\(\s*(\d{1,3}\s*,\s*){2}\d{1,3}\s*,\s*(\d*(\.\d+)?)\)$";
+
+            // Use Regex.IsMatch to check if the input matches the pattern
+            return Regex.IsMatch(rgbaColor, rgbaPattern);
+        }
+
+
+        private void ShowAlert()
+        {
+            // Check if the dialog has not been shown yet
+            if (!isAlertOpen)
+            {
+                // Show the dialog
+                using (frmAlert dialog = new frmAlert())
+                {
+                    // Optionally handle the dialog result or any other logic
+                    DialogResult result = dialog.ShowDialog();
+                    // ...
+
+                    // Set the flag to indicate that the dialog has been shown
+                    isAlertOpen = true;
+                }
+            }
+        }
     }
 }
