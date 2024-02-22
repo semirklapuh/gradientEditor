@@ -58,6 +58,7 @@
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(404, 128);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView1_UserDeletedRow);
             // 
             // label1
             // 
@@ -122,7 +123,6 @@
             this.radioBtnHex.TabStop = true;
             this.radioBtnHex.Text = "HEX";
             this.radioBtnHex.UseVisualStyleBackColor = true;
-            //this.radioBtnHex.CheckedChanged += new System.EventHandler(this.radioBtnHex_CheckedChanged);
             // 
             // radioBtnRgba
             // 
@@ -181,7 +181,7 @@
             this.webView21.CreationProperties = null;
             this.webView21.DefaultBackgroundColor = System.Drawing.Color.Transparent;
             this.webView21.Location = new System.Drawing.Point(33, 53);
-            this.webView21.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.webView21.Margin = new System.Windows.Forms.Padding(4);
             this.webView21.Name = "webView21";
             this.webView21.Size = new System.Drawing.Size(706, 82);
             this.webView21.Source = new System.Uri("C:\\Users\\meshm\\OneDrive\\Desktop\\gitRepoB&R\\gradientEditor\\html-resources\\index.ht" +

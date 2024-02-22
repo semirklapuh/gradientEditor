@@ -69,6 +69,12 @@
     <Compile Include="formTest.Designer.cs">
       <DependentUpon>formTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAlert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAlert.Designer.cs">
+      <DependentUpon>frmAlert.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmGradientEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="formTest.resx">
       <DependentUpon>formTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAlert.resx">
+      <DependentUpon>frmAlert.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmGradientEditor.resx">
       <DependentUpon>frmGradientEditor.cs</DependentUpon>
