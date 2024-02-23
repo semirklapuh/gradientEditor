@@ -127,15 +127,16 @@ namespace gradientEditor
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             isAlertOpen = false;
-            if (!ValidateColor(dataGridView1.Rows[e.RowIndex].Cells["Color"].Value.ToString()))
+            if (dataGridView1.Rows[e.RowIndex].Cells["Color"].Value == null || !ValidateColor(dataGridView1.Rows[e.RowIndex].Cells["Color"].Value.ToString()))
             {
                 dataGridView1.Rows[e.RowIndex].Cells["Color"].Value = "";
                 dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value = "";
+                dataGridView1.Rows[e.RowIndex].Cells["Color"].Style.BackColor = Color.White;
 
                 ShowAlert();
                 return;
             }
-            isAlertOpen = false;
+            //isAlertOpen = false;
             if (e.RowIndex == dataGridView1.Rows.Count - 1)
             {
                 // Add a new empty row
@@ -364,76 +365,75 @@ namespace gradientEditor
                     // Set the flag to indicate that the dialog has been shown
                     isAlertOpen = true;
                 }
-            }
-        }
-
-        private void readResult()
-        {
-            // Define regex patterns
-            string gradientTypePattern = @"^(linear|radial)";
-            string directionPattern = @"(?<=\().+?(?=,)";
-            string colorsPattern = @"(?:#(?:[0-9a-fA-F]{3}){1,2}|rgba\([^)]+\))\s+\d+%";
-
-            Match typeMatch = Regex.Match(txtResult.Text, gradientTypePattern);
-            Match directionMatch = Regex.Match(txtResult.Text, directionPattern);
-            MatchCollection colors = Regex.Matches(txtResult.Text, colorsPattern);
-
-            this.cbType.SelectedItem = typeMatch?.Value;
-            this.cbDirections.SelectedItem = directionMatch?.Value;
-
-            bool isHex = txtResult.Text.Contains("#");
-
-            if (isHex)
-            {
-                //this.radioBtnHex.Checked = true;
-            }
-            else
-            {
-                //this.radioBtnRgba.Checked = true;
-            }
-
-            var index = 0;
-            foreach (Match color in colors)
-            {
-
-                string colorValue = color.Value;
-                string hexColorPattern = @"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})";
-                string rgbaColorPattern = @"rgba\((\d+,\s*\d+,\s*\d+,\s*\d+\.\d+)\)";
-
-                Match colorMatch;
-                if (isHex) 
+                private void readResult()
                 {
-                    colorMatch = Regex.Match(colorValue, hexColorPattern);
+                    // Define regex patterns
+                    string gradientTypePattern = @"^(linear|radial)";
+                    string directionPattern = @"(?<=\().+?(?=,)";
+                    string colorsPattern = @"(?:#(?:[0-9a-fA-F]{3}){1,2}|rgba\([^)]+\))\s+\d+%";
+
+                    Match typeMatch = Regex.Match(txtResult.Text, gradientTypePattern);
+                    Match directionMatch = Regex.Match(txtResult.Text, directionPattern);
+                    MatchCollection colors = Regex.Matches(txtResult.Text, colorsPattern);
+
+                    this.cbType.SelectedItem = typeMatch?.Value;
+                    this.cbDirections.SelectedItem = directionMatch?.Value;
+
+                    bool isHex = txtResult.Text.Contains("#");
+
+                    if (isHex)
+                    {
+                        //this.radioBtnHex.Checked = true;
+                    }
+                    else
+                    {
+                        //this.radioBtnRgba.Checked = true;
+                    }
+
+                    var index = 0;
+                    foreach (Match color in colors)
+                    {
+
+                        string colorValue = color.Value;
+                        string hexColorPattern = @"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})";
+                        string rgbaColorPattern = @"rgba\((\d+,\s*\d+,\s*\d+,\s*\d+\.\d+)\)";
+
+                        Match colorMatch;
+                        if (isHex)
+                        {
+                            colorMatch = Regex.Match(colorValue, hexColorPattern);
+                        }
+                        else
+                        {
+                            colorMatch = Regex.Match(rgbaColorPattern, hexColorPattern);
+                        }
+
+                        if (colorMatch.Success)
+                        {
+                            dataGridView1.Rows[index].Cells["Color"].Value = colorMatch?.Value;
+                        }
+
+                        // Extract the percentage
+                        string percentagePattern = @" (\S+)$"; // Percentage pattern
+                        Match percentageMatch = Regex.Match(colorValue, percentagePattern.Replace(" ", ""));
+
+                        if (percentageMatch.Success)
+                        {
+                            dataGridView1.Rows[index].Cells["ColorStop"].Value = percentageMatch.Value;
+                        }
+                        index++;
+
+                    }
+
                 }
-                else
+
+                private void txtResult_TextChanged(object sender, EventArgs e)
                 {
-                    colorMatch = Regex.Match(rgbaColorPattern, hexColorPattern);
+                    readResult();
+                    //Change the backround of preview on every result text change
+                    previewUpdate();
                 }
-
-                if (colorMatch.Success)
-                {
-                    dataGridView1.Rows[index].Cells["Color"].Value = colorMatch?.Value;
-                }
-
-                // Extract the percentage
-                string percentagePattern = @" (\S+)$"; // Percentage pattern
-                Match percentageMatch = Regex.Match(colorValue, percentagePattern.Replace(" ", ""));
-
-                if (percentageMatch.Success)
-                {
-                    dataGridView1.Rows[index].Cells["ColorStop"].Value = percentageMatch.Value;
-                }
-                index++;
-
             }
-
-        }
-
-        private void txtResult_TextChanged(object sender, EventArgs e)
-        {
-            readResult();
-            //Change the backround of preview on every result text change
-            previewUpdate();
         }
     }
 }
