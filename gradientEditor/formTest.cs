@@ -435,5 +435,24 @@ namespace gradientEditor
             //Change the backround of preview on every result text change
             previewUpdate();
         }
+
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.CurrentCell.Value != null && ValidateColor(dataGridView1.CurrentCell.Value.ToString()) && radioBtnHex.Checked)
+            {
+                dataGridView1.CurrentCell.Style.BackColor = ColorTranslator.FromHtml(dataGridView1.CurrentCell.Value.ToString());
+            }
+            else if (dataGridView1.CurrentCell.Value != null && ValidateColor(dataGridView1.CurrentCell.Value.ToString()) && radioBtnRgba.Checked)
+            {
+                dataGridView1.CurrentCell.Style.BackColor = ColorTranslator.FromHtml(ConvertFromRgbaToHex(dataGridView1.CurrentCell.Value.ToString()));
+            }
+        }
+
+        private string ConvertFromRgbaToHex(string rgbaColor)
+        {
+            var colorValue = ConvertRgbaToColor(rgbaColor);
+            var hexValue = ConvertColorToHex(colorValue);
+            return hexValue;
+        }
     }
 }
