@@ -122,15 +122,16 @@ namespace gradientEditor
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             isAlertOpen = false;
-            if (!ValidateColor(dataGridView1.Rows[e.RowIndex].Cells["Color"].Value.ToString()))
+            if (dataGridView1.Rows[e.RowIndex].Cells["Color"].Value == null || !ValidateColor(dataGridView1.Rows[e.RowIndex].Cells["Color"].Value.ToString()))
             {
                 dataGridView1.Rows[e.RowIndex].Cells["Color"].Value = "";
                 dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value = "";
+                dataGridView1.Rows[e.RowIndex].Cells["Color"].Style.BackColor = Color.White;
 
                 ShowAlert();
                 return;
             }
-            isAlertOpen = false;
+            //isAlertOpen = false;
             if (e.RowIndex == dataGridView1.Rows.Count - 1)
             {
                 // Add a new empty row
@@ -168,7 +169,7 @@ namespace gradientEditor
                 {
                     var colorValue = row.Cells["Color"].Value.ToString();
                     var colorStop = row.Cells["ColorStop"].Value.ToString();
-
+                    colorCounter.Add(colorValue);
                     gradientResult += colorValue + " " + colorStop + ",";
                 }
             }
@@ -362,6 +363,25 @@ namespace gradientEditor
                     isAlertOpen = true;
                 }
             }
+        }
+
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridView1.CurrentCell.Value != null && ValidateColor(dataGridView1.CurrentCell.Value.ToString()) && radioBtnHex.Checked)
+            {
+                dataGridView1.CurrentCell.Style.BackColor = ColorTranslator.FromHtml(dataGridView1.CurrentCell.Value.ToString());
+            }
+            else if (dataGridView1.CurrentCell.Value != null && ValidateColor(dataGridView1.CurrentCell.Value.ToString()) && radioBtnRgba.Checked)
+            {
+                dataGridView1.CurrentCell.Style.BackColor = ColorTranslator.FromHtml(ConvertFromRgbaToHex(dataGridView1.CurrentCell.Value.ToString()));
+            }
+        }
+
+        private string ConvertFromRgbaToHex(string rgbaColor)
+        {
+            var colorValue = ConvertRgbaToColor(rgbaColor);
+            var hexValue = ConvertColorToHex(colorValue);
+            return hexValue;
         }
     }
 }
