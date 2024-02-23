@@ -63,6 +63,7 @@ namespace gradientEditor
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(303, 104);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView1_UserDeletedRow);
             // 
             // label1
             // 
@@ -83,19 +84,18 @@ namespace gradientEditor
             this.panel1.Location = new System.Drawing.Point(25, 310);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(493, 68);
+            this.panel1.Size = new System.Drawing.Size(530, 68);
             this.panel1.TabIndex = 3;
             // 
             // txtResult
             // 
-            this.txtResult.BackColor = System.Drawing.SystemColors.Control;
+            this.txtResult.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txtResult.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtResult.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.txtResult.Location = new System.Drawing.Point(13, 25);
+            this.txtResult.Location = new System.Drawing.Point(16, 28);
             this.txtResult.Margin = new System.Windows.Forms.Padding(2);
-            this.txtResult.Multiline = true;
             this.txtResult.Name = "txtResult";
-            this.txtResult.Size = new System.Drawing.Size(459, 18);
+            this.txtResult.Size = new System.Drawing.Size(499, 13);
             this.txtResult.TabIndex = 0;
             this.txtResult.TextChanged += new System.EventHandler(this.txtResult_TextChanged);
             // 
@@ -142,6 +142,7 @@ namespace gradientEditor
             this.radioBtnRgba.TabStop = true;
             this.radioBtnRgba.Text = "rgba";
             this.radioBtnRgba.UseVisualStyleBackColor = true;
+            this.radioBtnRgba.CheckedChanged += new System.EventHandler(this.radioBtnRgba_CheckedChanged);
             // 
             // label4
             // 
@@ -159,7 +160,7 @@ namespace gradientEditor
             this.cbType.Location = new System.Drawing.Point(427, 139);
             this.cbType.Margin = new System.Windows.Forms.Padding(2);
             this.cbType.Name = "cbType";
-            this.cbType.Size = new System.Drawing.Size(85, 21);
+            this.cbType.Size = new System.Drawing.Size(128, 21);
             this.cbType.TabIndex = 10;
             this.cbType.SelectedIndexChanged += new System.EventHandler(this.cbType_SelectedIndexChanged);
             // 
@@ -169,8 +170,9 @@ namespace gradientEditor
             this.cbDirections.Location = new System.Drawing.Point(427, 175);
             this.cbDirections.Margin = new System.Windows.Forms.Padding(2);
             this.cbDirections.Name = "cbDirections";
-            this.cbDirections.Size = new System.Drawing.Size(85, 21);
+            this.cbDirections.Size = new System.Drawing.Size(128, 21);
             this.cbDirections.TabIndex = 12;
+            this.cbDirections.SelectedIndexChanged += new System.EventHandler(this.cbDirections_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -189,7 +191,7 @@ namespace gradientEditor
             this.webView21.DefaultBackgroundColor = System.Drawing.Color.Transparent;
             this.webView21.Location = new System.Drawing.Point(25, 43);
             this.webView21.Name = "webView21";
-            this.webView21.Size = new System.Drawing.Size(486, 67);
+            this.webView21.Size = new System.Drawing.Size(527, 54);
             this.webView21.TabIndex = 13;
             this.webView21.ZoomFactor = 1D;
             // 
@@ -206,7 +208,7 @@ namespace gradientEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(550, 394);
+            this.ClientSize = new System.Drawing.Size(564, 394);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.webView21);
             this.Controls.Add(this.cbDirections);
