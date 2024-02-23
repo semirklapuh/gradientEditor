@@ -1,4 +1,9 @@
-﻿namespace gradientEditor
+﻿using gradientEditor.Properties;
+using System;
+using System.IO;
+using System.Reflection;
+
+namespace gradientEditor
 {
     partial class formTest
     {
@@ -90,9 +95,9 @@
             this.txtResult.Margin = new System.Windows.Forms.Padding(2);
             this.txtResult.Multiline = true;
             this.txtResult.Name = "txtResult";
-            this.txtResult.ReadOnly = true;
             this.txtResult.Size = new System.Drawing.Size(459, 18);
             this.txtResult.TabIndex = 0;
+            this.txtResult.TextChanged += new System.EventHandler(this.txtResult_TextChanged);
             // 
             // label2
             // 
@@ -185,7 +190,6 @@
             this.webView21.Location = new System.Drawing.Point(25, 43);
             this.webView21.Name = "webView21";
             this.webView21.Size = new System.Drawing.Size(486, 67);
-            this.webView21.Source = new System.Uri("C:\\Users\\Ajla\\source\\repos\\gradientEditor\\html-resources\\index.html", System.UriKind.Absolute);
             this.webView21.TabIndex = 13;
             this.webView21.ZoomFactor = 1D;
             // 

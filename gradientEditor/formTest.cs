@@ -4,8 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -22,6 +24,7 @@ namespace gradientEditor
             InitializeComboBoxType();
             InitializeComboBoxDirection();
             InitializeRadioBtnColorFormat();
+            this.webView21.Source = new System.Uri(Directory.GetCurrentDirectory() + "/html-resources/index.html", System.UriKind.Absolute);
         }
 
         private void InitializeRadioBtnColorFormat()
@@ -104,7 +107,10 @@ namespace gradientEditor
 
                 //TODO: ask someone
                 // Set a default value for color stop
-                dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value = "50%";
+
+                var currentValue = dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value;
+                dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value =
+                    currentValue == null ? "50%" : currentValue;
 
                 //// Add a new empty row
                 //DataGridViewRow newRow = new DataGridViewRow();
@@ -158,8 +164,6 @@ namespace gradientEditor
 
             txtResult.Text = gradientResult;
 
-            //Change the backround of preview on every result change
-            previewUpdate();
         }
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
@@ -184,6 +188,41 @@ namespace gradientEditor
         private void previewUpdate()
         {
             this.webView21.ExecuteScriptAsync($"document.getElementById('preview_space').style['background'] = '" + txtResult.Text + "';");
+        }
+
+        private void readResultValues()
+        {
+            Match gradientTypeMatch = Regex.Match(txtResult.Text, @"^.*?(?=-)");
+            Match gradientDirectionMatch = Regex.Match(txtResult.Text, @"(?<=\()(.*?)(?=,)");
+            MatchCollection colorsWithStopsMatch= Regex.Matches(txtResult.Text, @"[^,\s][^\,]*[^,\s]*"); //starts from the 2nd element
+
+            this.cbType.SelectedItem = gradientTypeMatch?.Value;
+            this.cbDirections.SelectedItem = gradientDirectionMatch?.Value;
+
+            try
+            {
+                int index = 0;
+                foreach (Match match in colorsWithStopsMatch)
+                {
+                    if (index > 0) // don't take the first element 
+                    {
+                        string[] colorInfo = match.Value.Split(' ');
+                        // Insert the text and change the color of the first column
+                        dataGridView1.Rows[index - 1].Cells["Color"].Value = colorInfo[0];
+                        // dataGridView1.Rows[match.Index - 1].Cells["Color"].Style.BackColor = colorMatch.Value;
+                        dataGridView1.Rows[index - 1].Cells["ColorStop"].Value = colorInfo[1].Replace(")",""); //tha last value contains bracket (TODO: idea, fix it with regex)
+                    }
+                    index++;
+                }
+            }
+            catch (RegexMatchTimeoutException) { }
+        }
+
+        private void txtResult_TextChanged(object sender, EventArgs e)
+        {
+            readResultValues();
+            //Change the backround of preview on every result change
+            previewUpdate();
         }
     }
 }
