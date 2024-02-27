@@ -1,4 +1,5 @@
-﻿using System;
+﻿using gradientEditor.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace gradientEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new formTest());
+            IColorHelper colorHelper = new ColorHelper();
+            Application.Run(new formTest(colorHelper));
         }
     }
 }

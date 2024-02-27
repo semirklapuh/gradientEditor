@@ -1,4 +1,5 @@
-﻿using Syncfusion.Lic.util.encoders;
+﻿using gradientEditor.Helpers;
+using Syncfusion.Lic.util.encoders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,9 +21,12 @@ namespace gradientEditor
     public partial class formTest : Form
     {
         public bool isAlertOpen = false;
-        public formTest()
+
+        private readonly IColorHelper _colorHelper;
+        public formTest(IColorHelper colorHelper)
         {
             InitializeComponent();
+            _colorHelper = colorHelper;
             InitializeComboBoxType();
             InitializeComboBoxDirection();
             InitializeDataGridView();
@@ -108,7 +112,7 @@ namespace gradientEditor
                     }
                     else
                     {
-                        newText = ConvertColorToRGBA(MyDialog.Color);
+                        newText = _colorHelper.ConvertColorToRGBA(MyDialog.Color);
                     }
                 }
 
@@ -221,95 +225,15 @@ namespace gradientEditor
             FormatResult(dataGridView1);
         }
 
-        private string ConvertColorToRGBA(Color color)
-        {
-            int red = color.R;
-            int green = color.G;
-            int blue = color.B;
-            int alpha = color.A;
-
-            // Normalize alpha to a float value between 0.0 and 1.0
-            //float alphaNormalized = alpha / 255.0f;
-            float alphaNormalized = 1;
-
-            // Format the RGBA string
-            string rgbaFormat = $"rgba({red}, {green}, {blue}, {alphaNormalized:F2})";
-
-            return rgbaFormat;
-        }
-
-        private string ConvertColorToHex(Color color)
-        {
-            // Use ColorTranslator.ToHtml to convert Color to hex color code
-            string hexColor = ColorTranslator.ToHtml(color);
-
-            return hexColor;
-        }
-
-        private Color ConvertHexToColor(string hex)
-        {
-            // Remove any leading '#' character
-            hex = hex.TrimStart('#');
-
-            // Convert the hex string to an integer
-            int intValue = Convert.ToInt32(hex, 16);
-
-            // Create a Color object from the integer value
-            Color color = Color.FromArgb(intValue);
-
-            return color;
-        }
-
-        private Color ConvertRgbaToColor(string rgba)
-        {
-            // Remove "rgba(" and ")" and split the components
-            string[] components = rgba.Replace("rgba(", "").Replace(")", "").Split(',');
-
-            // Parse the components and convert to integers
-            int alpha = (int)(Convert.ToDouble(components[3]) * 255); // Normalize alpha to 0-255 range
-            int red = Convert.ToInt32(components[0].Trim());
-            int green = Convert.ToInt32(components[1].Trim());
-            int blue = Convert.ToInt32(components[2].Trim());
-
-            // Create a Color object from the components
-            Color color = Color.FromArgb(alpha, red, green, blue);
-
-            return color;
-        }
-
-        private void ConvertFromHexToRgba(DataGridView dataGridView)
-        {
-            foreach (DataGridViewRow row in dataGridView.Rows)
-            {
-                if (row.Cells["Color"].Value != null)
-                {
-                    var colorValue = ConvertHexToColor(row.Cells["Color"].Value.ToString());
-                    row.Cells["Color"].Value = ConvertColorToRGBA(colorValue);
-                }
-            }
-        }
-
-        private void ConvertFromRgbaToHex(DataGridView dataGridView)
-        {
-            foreach (DataGridViewRow row in dataGridView.Rows)
-            {
-                if (row.Cells["Color"].Value != null)
-                {
-                    var colorValue = ConvertRgbaToColor(row.Cells["Color"].Value.ToString());
-                    row.Cells["Color"].Value = ConvertColorToHex(colorValue);
-                }
-            }
-        }
-
         private void radioBtnRgba_CheckedChanged(object sender, EventArgs e)
         {
             if (radioBtnHex.Checked)
             {
-                ConvertFromRgbaToHex(dataGridView1);
+                _colorHelper.ConvertFromRgbaToHex(dataGridView1);
             }
             else
             {
-                ConvertFromHexToRgba(dataGridView1);
+                _colorHelper.ConvertFromHexToRgba(dataGridView1);
             }
         }
 
@@ -322,32 +246,13 @@ namespace gradientEditor
         {
             if (radioBtnHex.Checked)
             {
-                return IsValidHexColor(color);
+                return _colorHelper.IsValidHexColor(color);
             }
             else
             {
-                return IsValidRGBAColor(color);
+                return _colorHelper.IsValidRGBAColor(color);
             }
         }
-
-        bool IsValidHexColor(string hexColor)
-        {
-            // Define a regular expression pattern for a valid hex color code
-            string hexPattern = @"^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$";
-
-            // Use Regex.IsMatch to check if the input matches the pattern
-            return Regex.IsMatch(hexColor, hexPattern);
-        }
-
-        bool IsValidRGBAColor(string rgbaColor)
-        {
-            // Define a regular expression pattern for a valid RGBA color code
-            string rgbaPattern = @"^rgba\(\s*(\d{1,3}\s*,\s*){2}\d{1,3}\s*,\s*(\d*(\.\d+)?)\)$";
-
-            // Use Regex.IsMatch to check if the input matches the pattern
-            return Regex.IsMatch(rgbaColor, rgbaPattern);
-        }
-
 
         private void ShowAlert()
         {
@@ -444,15 +349,8 @@ namespace gradientEditor
             }
             else if (dataGridView1.CurrentCell.Value != null && ValidateColor(dataGridView1.CurrentCell.Value.ToString()) && radioBtnRgba.Checked)
             {
-                dataGridView1.CurrentCell.Style.BackColor = ColorTranslator.FromHtml(ConvertFromRgbaToHex(dataGridView1.CurrentCell.Value.ToString()));
+                dataGridView1.CurrentCell.Style.BackColor = ColorTranslator.FromHtml(_colorHelper.ConvertColorFromRgbaToHex(dataGridView1.CurrentCell.Value.ToString()));
             }
-        }
-
-        private string ConvertFromRgbaToHex(string rgbaColor)
-        {
-            var colorValue = ConvertRgbaToColor(rgbaColor);
-            var hexValue = ConvertColorToHex(colorValue);
-            return hexValue;
         }
     }
 }

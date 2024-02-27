@@ -71,3 +71,6 @@ C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradient.9F2
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.exe
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.pdb
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.frmAlert.resources
+C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\bin\Debug\html-resources\cssGradient.css
+C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\bin\Debug\html-resources\index.html
+C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\bin\Debug\html-resources\script.js
