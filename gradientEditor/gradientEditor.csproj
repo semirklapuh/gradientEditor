@@ -75,12 +75,6 @@
     <Compile Include="frmAlert.Designer.cs">
       <DependentUpon>frmAlert.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmGradientEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmGradientEditor.Designer.cs">
-      <DependentUpon>frmGradientEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\IColorHelper.cs" />
     <Compile Include="Program.cs" />
@@ -90,9 +84,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmAlert.resx">
       <DependentUpon>frmAlert.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmGradientEditor.resx">
-      <DependentUpon>frmGradientEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

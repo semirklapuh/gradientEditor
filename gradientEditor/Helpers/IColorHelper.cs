@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace gradientEditor.Helpers
@@ -28,5 +22,9 @@ namespace gradientEditor.Helpers
         bool IsValidHexColor(string hexColor);
 
         bool IsValidRGBAColor(string rgbaColor);
+
+        string FormatGradientResult(string gradientType, string gradientDirection, DataGridView dataGridView);
+
+        DataGridView ConvertResultToFormData(DataGridView dataGridView, string resultString, ComboBox selectedType, ComboBox selectedDirection);
     }
 }

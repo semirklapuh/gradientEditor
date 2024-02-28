@@ -63,7 +63,6 @@ C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\bin\Debug\Microsoft.We
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\bin\Debug\Syncfusion.Shared.Base.xml
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.csproj.AssemblyReference.cache
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.formTest.resources
-C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.frmGradientEditor.resources
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.Properties.Resources.resources
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.csproj.GenerateResource.cache
 C:\Users\meshm\OneDrive\Desktop\gitRepoB&R\gradientEditor\obj\Debug\gradientEditor.csproj.CoreCompileInputs.cache

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace gradientEditor.Helpers
@@ -102,7 +100,7 @@ namespace gradientEditor.Helpers
             return hexValue;
         }
 
-       public bool IsValidHexColor(string hexColor)
+        public bool IsValidHexColor(string hexColor)
         {
             // Define a regular expression pattern for a valid hex color code
             string hexPattern = @"^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$";
@@ -118,6 +116,100 @@ namespace gradientEditor.Helpers
 
             // Use Regex.IsMatch to check if the input matches the pattern
             return Regex.IsMatch(rgbaColor, rgbaPattern);
+        }
+
+        public string FormatGradientResult(string gradientType, string gradientDirection, DataGridView dataGridView)
+        {
+            var gradientResult = gradientType + "(" + gradientDirection + ",";
+            List<string> colorCounter = new List<string>();
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (row.Cells["Color"].Value != null && row.Cells["ColorStop"].Value != null)
+                {
+                    var colorValue = row.Cells["Color"].Value.ToString();
+                    var colorStop = row.Cells["ColorStop"].Value.ToString();
+                    colorCounter.Add(colorValue);
+                    gradientResult += colorValue + " " + colorStop + ",";
+                }
+            }
+
+            gradientResult = gradientResult.Substring(0, gradientResult.Length - 1);
+            gradientResult += ")";
+
+            if (colorCounter.Count() >= 2)
+            {
+                return gradientResult;
+            }
+            else
+            {
+                gradientResult = "";
+            }
+
+            return gradientResult;
+        }
+
+        public DataGridView ConvertResultToFormData(DataGridView dataGridView, string resultString, ComboBox selectedType, ComboBox selectedDirection)
+        {
+            // Define regex patterns
+            string gradientTypePattern = @"^(linear|radial)";
+            string directionPattern = @"(?<=\().+?(?=,)";
+            string colorsPattern = @"(?:#(?:[0-9a-fA-F]{3}){1,2}|rgba\([^)]+\))\s+\d+%";
+
+            Match typeMatch = Regex.Match(resultString, gradientTypePattern);
+            Match directionMatch = Regex.Match(resultString, directionPattern);
+            MatchCollection colors = Regex.Matches(resultString, colorsPattern);
+
+            selectedType.SelectedItem = typeMatch?.Value;
+            selectedDirection.SelectedItem = directionMatch?.Value;
+
+            bool isHex = resultString.Contains("#");
+
+            if (isHex)
+            {
+                //this.radioBtnHex.Checked = true;
+            }
+            else
+            {
+                //this.radioBtnRgba.Checked = true;
+            }
+
+            var index = 0;
+            foreach (Match color in colors)
+            {
+
+                string colorValue = color.Value;
+                string hexColorPattern = @"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})";
+                string rgbaColorPattern = @"rgba\((\d+,\s*\d+,\s*\d+,\s*\d+\.\d+)\)";
+
+                Match colorMatch;
+                if (isHex)
+                {
+                    colorMatch = Regex.Match(colorValue, hexColorPattern);
+                }
+                else
+                {
+                    colorMatch = Regex.Match(colorValue, rgbaColorPattern);
+                }
+
+                if (colorMatch.Success)
+                {
+                    dataGridView.Rows[index].Cells["Color"].Value = colorMatch?.Value;
+                }
+
+                // Extract the percentage
+                string percentagePattern = @" (\S+)$"; // Percentage pattern
+                Match percentageMatch = Regex.Match(colorValue, percentagePattern.Replace(" ", ""));
+
+                if (percentageMatch.Success)
+                {
+                    dataGridView.Rows[index].Cells["ColorStop"].Value = percentageMatch.Value;
+                }
+                index++;
+
+            }
+
+            return dataGridView;
         }
     }
 }
