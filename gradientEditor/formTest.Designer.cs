@@ -47,6 +47,9 @@ namespace gradientEditor
             this.label5 = new System.Windows.Forms.Label();
             this.webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.label6 = new System.Windows.Forms.Label();
+            this.okBtn = new System.Windows.Forms.Button();
+            this.cancleBtn = new System.Windows.Forms.Button();
+            this.lblWrongInput = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.webView21)).BeginInit();
@@ -56,36 +59,36 @@ namespace gradientEditor
             // 
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(25, 151);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridView1.Location = new System.Drawing.Point(33, 194);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(303, 104);
+            this.dataGridView1.Size = new System.Drawing.Size(404, 128);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
             this.dataGridView1.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView1_UserDeletedRow);
+            this.dataGridView1.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridView1_UserDeletingRow);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 286);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(30, 361);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
+            this.label1.Size = new System.Drawing.Size(45, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "Result";
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.txtResult);
-            this.panel1.Location = new System.Drawing.Point(25, 310);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2);
+            this.panel1.Location = new System.Drawing.Point(33, 390);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(530, 68);
+            this.panel1.Size = new System.Drawing.Size(706, 83);
             this.panel1.TabIndex = 3;
             // 
             // txtResult
@@ -93,40 +96,39 @@ namespace gradientEditor
             this.txtResult.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.txtResult.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtResult.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.txtResult.Location = new System.Drawing.Point(16, 28);
-            this.txtResult.Margin = new System.Windows.Forms.Padding(2);
+            this.txtResult.Location = new System.Drawing.Point(21, 34);
+            this.txtResult.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtResult.Name = "txtResult";
-            this.txtResult.Size = new System.Drawing.Size(499, 13);
+            this.txtResult.ReadOnly = true;
+            this.txtResult.Size = new System.Drawing.Size(665, 15);
             this.txtResult.TabIndex = 0;
             this.txtResult.TextChanged += new System.EventHandler(this.txtResult_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(22, 125);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(29, 162);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.Size = new System.Drawing.Size(58, 16);
             this.label2.TabIndex = 4;
             this.label2.Text = "Color list";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(366, 262);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(488, 330);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(63, 13);
+            this.label3.Size = new System.Drawing.Size(79, 16);
             this.label3.TabIndex = 5;
             this.label3.Text = "Color format";
             // 
             // radioBtnHex
             // 
             this.radioBtnHex.AutoSize = true;
-            this.radioBtnHex.Location = new System.Drawing.Point(451, 251);
-            this.radioBtnHex.Margin = new System.Windows.Forms.Padding(2);
+            this.radioBtnHex.Location = new System.Drawing.Point(601, 317);
+            this.radioBtnHex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioBtnHex.Name = "radioBtnHex";
-            this.radioBtnHex.Size = new System.Drawing.Size(47, 17);
+            this.radioBtnHex.Size = new System.Drawing.Size(55, 20);
             this.radioBtnHex.TabIndex = 6;
             this.radioBtnHex.TabStop = true;
             this.radioBtnHex.Text = "HEX";
@@ -135,10 +137,10 @@ namespace gradientEditor
             // radioBtnRgba
             // 
             this.radioBtnRgba.AutoSize = true;
-            this.radioBtnRgba.Location = new System.Drawing.Point(451, 273);
-            this.radioBtnRgba.Margin = new System.Windows.Forms.Padding(2);
+            this.radioBtnRgba.Location = new System.Drawing.Point(601, 344);
+            this.radioBtnRgba.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioBtnRgba.Name = "radioBtnRgba";
-            this.radioBtnRgba.Size = new System.Drawing.Size(46, 17);
+            this.radioBtnRgba.Size = new System.Drawing.Size(56, 20);
             this.radioBtnRgba.TabIndex = 7;
             this.radioBtnRgba.TabStop = true;
             this.radioBtnRgba.Text = "rgba";
@@ -148,40 +150,38 @@ namespace gradientEditor
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(366, 142);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(489, 198);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(31, 13);
+            this.label4.Size = new System.Drawing.Size(39, 16);
             this.label4.TabIndex = 9;
             this.label4.Text = "Type";
             // 
             // cbType
             // 
             this.cbType.FormattingEnabled = true;
-            this.cbType.Location = new System.Drawing.Point(427, 139);
-            this.cbType.Margin = new System.Windows.Forms.Padding(2);
+            this.cbType.Location = new System.Drawing.Point(570, 194);
+            this.cbType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbType.Name = "cbType";
-            this.cbType.Size = new System.Drawing.Size(128, 21);
+            this.cbType.Size = new System.Drawing.Size(169, 24);
             this.cbType.TabIndex = 10;
             this.cbType.SelectedIndexChanged += new System.EventHandler(this.cbType_SelectedIndexChanged);
             // 
             // cbDirections
             // 
             this.cbDirections.FormattingEnabled = true;
-            this.cbDirections.Location = new System.Drawing.Point(427, 175);
-            this.cbDirections.Margin = new System.Windows.Forms.Padding(2);
+            this.cbDirections.Location = new System.Drawing.Point(570, 238);
+            this.cbDirections.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbDirections.Name = "cbDirections";
-            this.cbDirections.Size = new System.Drawing.Size(128, 21);
+            this.cbDirections.Size = new System.Drawing.Size(169, 24);
             this.cbDirections.TabIndex = 12;
             this.cbDirections.SelectedIndexChanged += new System.EventHandler(this.cbDirections_SelectedIndexChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(366, 178);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Location = new System.Drawing.Point(489, 242);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 13);
+            this.label5.Size = new System.Drawing.Size(60, 16);
             this.label5.TabIndex = 11;
             this.label5.Text = "Direction";
             // 
@@ -190,26 +190,61 @@ namespace gradientEditor
             this.webView21.AllowExternalDrop = true;
             this.webView21.CreationProperties = null;
             this.webView21.DefaultBackgroundColor = System.Drawing.Color.Transparent;
-            this.webView21.Location = new System.Drawing.Point(25, 43);
+            this.webView21.Location = new System.Drawing.Point(33, 53);
+            this.webView21.Margin = new System.Windows.Forms.Padding(4);
             this.webView21.Name = "webView21";
-            this.webView21.Size = new System.Drawing.Size(527, 54);
+            this.webView21.Size = new System.Drawing.Size(703, 97);
             this.webView21.TabIndex = 13;
             this.webView21.ZoomFactor = 1D;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(22, 18);
+            this.label6.Location = new System.Drawing.Point(29, 22);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(45, 13);
+            this.label6.Size = new System.Drawing.Size(55, 16);
             this.label6.TabIndex = 14;
             this.label6.Text = "Preview";
             // 
+            // okBtn
+            // 
+            this.okBtn.Enabled = false;
+            this.okBtn.Location = new System.Drawing.Point(500, 499);
+            this.okBtn.Name = "okBtn";
+            this.okBtn.Size = new System.Drawing.Size(111, 32);
+            this.okBtn.TabIndex = 15;
+            this.okBtn.Text = "OK";
+            this.okBtn.UseVisualStyleBackColor = true;
+            // 
+            // cancleBtn
+            // 
+            this.cancleBtn.Location = new System.Drawing.Point(617, 499);
+            this.cancleBtn.Name = "cancleBtn";
+            this.cancleBtn.Size = new System.Drawing.Size(121, 32);
+            this.cancleBtn.TabIndex = 16;
+            this.cancleBtn.Text = "Cancle";
+            this.cancleBtn.UseVisualStyleBackColor = true;
+            // 
+            // lblWrongInput
+            // 
+            this.lblWrongInput.AutoSize = true;
+            this.lblWrongInput.ForeColor = System.Drawing.Color.Red;
+            this.lblWrongInput.Location = new System.Drawing.Point(30, 330);
+            this.lblWrongInput.Name = "lblWrongInput";
+            this.lblWrongInput.Size = new System.Drawing.Size(81, 16);
+            this.lblWrongInput.TabIndex = 17;
+            this.lblWrongInput.Text = "Wrong input!";
+            this.lblWrongInput.Visible = false;
+            // 
             // formTest
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(564, 394);
+            this.ClientSize = new System.Drawing.Size(763, 556);
+            this.Controls.Add(this.lblWrongInput);
+            this.Controls.Add(this.cancleBtn);
+            this.Controls.Add(this.okBtn);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.webView21);
             this.Controls.Add(this.cbDirections);
@@ -223,7 +258,7 @@ namespace gradientEditor
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "formTest";
             this.Text = "formTest";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -251,5 +286,8 @@ namespace gradientEditor
         private System.Windows.Forms.Label label5;
         private Microsoft.Web.WebView2.WinForms.WebView2 webView21;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button okBtn;
+        private System.Windows.Forms.Button cancleBtn;
+        private System.Windows.Forms.Label lblWrongInput;
     }
 }

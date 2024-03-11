@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace gradientEditor
 {
@@ -55,10 +56,14 @@ namespace gradientEditor
 
             dataGridView1.CellClick += dataGridView1_CellClick;
             dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
+            // Add the MouseDown event handler for header cells
+            dataGridView1.RowHeaderMouseDoubleClick += DataGridView_RowHeaderMouseDoubleClick;
 
             dataGridView1.RowHeadersVisible = true;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
 
+
+            //add new empty row
             DataGridViewRow newRow = new DataGridViewRow();
             newRow.CreateCells(dataGridView1);
             dataGridView1.Rows.Add(newRow);
@@ -99,16 +104,19 @@ namespace gradientEditor
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            isAlertOpen = false;
             if (!ValidateColor(dataGridView1.Rows[e.RowIndex].Cells["Color"].Value.ToString()))
             {
                 dataGridView1.Rows[e.RowIndex].Cells["Color"].Value = "";
                 dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value = "";
-
-                ShowAlert();
+                dataGridView1.Rows[e.RowIndex].Cells["Color"].Style.BackColor = Color.White;
+                ShowAlert(true);
                 return;
             }
-            isAlertOpen = false;
+            ShowAlert(false);
+            if (dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value == null || dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value.ToString() == "")
+            {
+                dataGridView1.Rows[e.RowIndex].Cells["ColorStop"].Value = "50%";
+            }
             if (e.RowIndex == dataGridView1.Rows.Count - 1)
             {
                 DataGridViewRow newRow = new DataGridViewRow();
@@ -135,6 +143,15 @@ namespace gradientEditor
             var gradientResult = _colorHelper.FormatGradientResult(gradientType, gradientDirection, dataGridView);
 
             txtResult.Text = gradientResult;
+
+            if (txtResult.Text != null && txtResult.Text != "")
+            {
+                okBtn.Enabled = true;
+            }
+            else
+            {
+                okBtn.Enabled = false;
+            }
         }
 
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
@@ -196,16 +213,9 @@ namespace gradientEditor
             }
         }
 
-        private void ShowAlert()
+        private void ShowAlert(bool openAlert)
         {
-            if (!isAlertOpen)
-            {
-                using (frmAlert dialog = new frmAlert())
-                {
-                    DialogResult result = dialog.ShowDialog();
-                    isAlertOpen = true;
-                }
-            }
+                lblWrongInput.Visible = openAlert;
         }
 
         private void readResult()
@@ -230,5 +240,64 @@ namespace gradientEditor
                 dataGridView1.CurrentCell.Style.BackColor = ColorTranslator.FromHtml(_colorHelper.ConvertColorFromRgbaToHex(dataGridView1.CurrentCell.Value.ToString()));
             }
         }
+
+        private void dataGridView1_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (dataGridView1.Rows.Count == 1)
+            {
+                e.Cancel = true;
+                MessageBox.Show("Cannot delete the only row.");
+            }
+        }
+
+        private void AddEmptyRow(int index)
+        {
+            DataGridViewRow row = new DataGridViewRow();
+
+            //DataGridViewRow newRow = new DataGridViewRow();
+            //newRow.CreateCells(dataGridView1);
+            //dataGridView1.Rows.Add(newRow);
+
+            // Insert the new row at the specified index
+            dataGridView1.Rows.Insert(index, row);
+        }
+
+        private void DataGridView_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                // Double-click on a cell
+                int rowIndex = e.RowIndex;
+
+                // Add a new empty row below the clicked row
+                AddEmptyRow(rowIndex + 1);
+
+                // Refresh the DataGridView to reflect the changes
+                dataGridView1.Refresh();
+            }
+        }
+
+        private void CheckValues(DataGridView dataGridView)
+        {
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                if (row.Cells["Color"].Value != null && row.Cells["ColorStop"].Value != null)
+                {
+                    var colorValue = row.Cells["Color"].Value.ToString();
+                    var colorStop = row.Cells["ColorStop"].Value.ToString();
+                    if (!ValidateColor(colorValue))
+                    {
+                        ShowAlert(true);
+                        return;
+                    }
+                    else
+                    {
+                        ShowAlert(false);
+                        return;
+                    }
+                }
+            }
+        }
+
     }
 }
